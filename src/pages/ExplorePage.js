@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -25,32 +26,50 @@ class ExplorePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      departments: ["One", "Two"],
+      departments: [],
       selectedDept: "",
-      courses: [
-        {
-          rating: 0,
-          courseCode: "CSC108H5",
-          courseName: "Introduction to Programming"
-        },
-        {
-          rating: 0,
-          courseCode: "CSC148H5",
-          courseName: "Introduction to Computer Science"
-        }
-      ]
+      isLoading: true,
+      redirect: false,
+      courses: []
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    let { campus } = this.props.match.params;
 
-  getList = () => {
-    let departmentsOption = [];
+    db.collection("institutions")
+      .where("_id", "==", campus)
+      .get()
+      .then(querySnapshot => {
+        if (querySnapshot.docs.length) {
+          let { _id } = querySnapshot.docs[0].data();
+
+          this.getDepartments(_id);
+        } else {
+          this.setState({ redirect: true });
+        }
+      });
+  }
+
+  getDepartments = campus => {
+    db.collection("departments")
+      .where("institution", "==", campus)
+      .get()
+      .then(querySnapshot => {
+        if (querySnapshot.docs.length) {
+          let departments = querySnapshot.docs.map(d => d.data());
+          this.setState({ departments: departments, isLoading: false });
+        }
+      });
+  };
+
+  renderOptions = () => {
+    let departmentsOption = [<option key="first"></option>];
 
     for (let i = 0; i < this.state.departments.length; i++) {
       departmentsOption.push(
-        <option key={this.state.departments[i]}>
-          {this.state.departments[i]}
+        <option key={this.state.departments[i].title}>
+          {this.state.departments[i].title}
         </option>
       );
     }
@@ -62,32 +81,38 @@ class ExplorePage extends React.Component {
     this.setState({ selectedDept: e.target.value });
   };
 
-  handleClick = e => {
-    console.log(e);
-  };
-
   render() {
-    return (
-      <div>
-        <h1>Explore</h1>
+    if (this.state.redirect) {
+      return <Redirect to="/404" />;
+    } else {
+      return (
+        <Fragment>
+          {!this.state.isLoading && (
+            <Fragment>
+              <h1>Explore</h1>
 
-        <FormControl>
-          <InputLabel htmlFor="age-native-simple">Select Department</InputLabel>
-          <Select
-            native
-            value={this.state.selectedDept}
-            onChange={this.handleChange}
-          >
-            {this.getList()}
-          </Select>
-        </FormControl>
+              <FormControl>
+                <InputLabel htmlFor="age-native-simple">
+                  Select Department
+                </InputLabel>
+                <Select
+                  native
+                  value={this.state.selectedDept}
+                  onChange={this.handleChange}
+                >
+                  {this.renderOptions()}
+                </Select>
+              </FormControl>
 
-        <Results
-          courses={this.state.courses}
-          onClick={this.handleClick}
-        ></Results>
-      </div>
-    );
+              <Results
+                courses={this.state.courses}
+                selectedDept={this.state.selectedDept}
+              ></Results>
+            </Fragment>
+          )}
+        </Fragment>
+      );
+    }
   }
 }
 

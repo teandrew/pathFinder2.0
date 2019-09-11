@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
-    <div>
+    <main role="main">
       <h1>University of Toronto Course Reviews</h1>
       <h2>Select Your Campus:</h2>
       <ul>
@@ -17,6 +17,6 @@ export default function HomePage() {
           <Link to="/explore/utsg">University of Toronto St. George</Link>
         </li>
       </ul>
-    </div>
+    </main>
   );
 }

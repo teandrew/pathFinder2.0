@@ -8,12 +8,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
+import { db } from "../firebase";
+
 export default class Results extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  handleClick = course => {};
+  getCourses = dept => {};
 
   render() {
     return (
@@ -33,15 +35,15 @@ export default class Results extends React.Component {
               {this.props.courses.map(course => (
                 <TableRow
                   hover
-                  key={course.courseCode}
+                  key={course.code}
                   component={Link}
-                  to={"/courses/" + course.courseCode}
+                  to={"/courses/" + course.code}
                 >
                   <TableCell component="p" scope="row">
-                    {course.rating}
+                    {course.ratings.average}
                   </TableCell>
-                  <TableCell component="p">{course.courseCode}</TableCell>
-                  <TableCell component="p">{course.courseName}</TableCell>
+                  <TableCell component="p">{course.code}</TableCell>
+                  <TableCell component="p">{course.name}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
