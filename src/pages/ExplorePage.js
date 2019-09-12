@@ -63,6 +63,18 @@ class ExplorePage extends React.Component {
       });
   };
 
+  getCourses = dept => {
+    db.collection("courses")
+      .where("department", "==", dept)
+      .get()
+      .then(querySnapshot => {
+        if (querySnapshot.docs.length) {
+          let courses = querySnapshot.docs.map(c => c.data());
+          console.log(courses);
+        }
+      });
+  };
+
   renderOptions = () => {
     let departmentsOption = [<option key="first"></option>];
 

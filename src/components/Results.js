@@ -13,9 +13,31 @@ import { db } from "../firebase";
 export default class Results extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: false,
+      courses: []
+    };
   }
 
-  getCourses = dept => {};
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedDept !== this.props.selectedDept) {
+      this.getCourses(this.props.selectedDept);
+    }
+  }
+
+  getCourses = dept => {
+    this.setState({ isLoading: true });
+    db.collection("courses")
+      .where("department", "==", dept)
+      .get()
+      .then(querySnapshot => {
+        let courses = querySnapshot.docs.map(c => c.data());
+        this.setState({
+          courses: courses,
+          isLoading: false
+        });
+      });
+  };
 
   render() {
     return (
@@ -32,7 +54,7 @@ export default class Results extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody component="div">
-              {this.props.courses.map(course => (
+              {this.state.courses.map(course => (
                 <TableRow
                   hover
                   key={course.code}
