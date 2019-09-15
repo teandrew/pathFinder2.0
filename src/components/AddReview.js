@@ -1,6 +1,8 @@
 import React from "react";
 
 import AddReviewForm from "./AddReviewForm";
+import Container from "@material-ui/core/Container";
+import { Typography } from "@material-ui/core";
 
 export default class AddReview extends React.Component {
   constructor(props) {
@@ -41,10 +43,17 @@ export default class AddReview extends React.Component {
 
   render() {
     return (
-      <AddReviewForm
-        values={this.state.reviewInfo}
-        updateValue={this.updateValue}
-      />
+      <React.Fragment>
+        <Typography variant="h5" gutterBottom>
+          Leave Your Own Review
+        </Typography>
+        <Container maxWidth="sm">
+          <AddReviewForm
+            values={this.state.reviewInfo}
+            updateValue={this.updateValue}
+          />
+        </Container>
+      </React.Fragment>
     );
   }
 }

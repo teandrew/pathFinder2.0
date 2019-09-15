@@ -1,7 +1,13 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
+
+import Container from "@material-ui/core/Container";
+
+import Reviews from "../components/Reviews";
+import CourseInfo from "../components/CourseInfo";
+import LoadingPage from "../components/LoadingPage";
+
 import { db } from "../firebase";
-// import review components
 
 export default class CoursePage extends React.Component {
   constructor(props) {
@@ -25,12 +31,16 @@ export default class CoursePage extends React.Component {
         .get()
         .then(doc => {
           if (doc.exists) {
-            this.setState({ course: doc.data(), isLoading: false });
+            this.setState({
+              course: doc.data(),
+              isLoading: false
+            });
           } else {
             this.setState({ redirect: true });
           }
         })
         .catch(error => {
+          console.log(error);
           console.log("Error getting course");
         });
     }
@@ -41,9 +51,16 @@ export default class CoursePage extends React.Component {
       return <Redirect to="/404" />;
     } else {
       return (
-        <Fragment>
-          {!this.state.isLoading && <main role="main"></main>}
-        </Fragment>
+        <Container className="pageContainer">
+          {this.state.isLoading && <LoadingPage />}
+          {!this.state.isLoading && (
+            <main role="main">
+              <CourseInfo course={this.state.course} />
+
+              <Reviews course={this.state.course} />
+            </main>
+          )}
+        </Container>
       );
     }
   }

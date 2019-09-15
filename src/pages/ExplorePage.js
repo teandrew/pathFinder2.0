@@ -1,28 +1,18 @@
 import React, { Fragment } from "react";
 import { Redirect } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+
+import LoadingPage from "../components/LoadingPage";
+
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 
 import { db } from "../firebase";
 import Results from "../components/Results";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    minWidth: 300
-  },
-  formControl: {
-    margin: theme.spacing(1)
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
-}));
-
-class ExplorePage extends React.Component {
+export default class ExplorePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,18 +53,6 @@ class ExplorePage extends React.Component {
       });
   };
 
-  getCourses = dept => {
-    db.collection("courses")
-      .where("department", "==", dept)
-      .get()
-      .then(querySnapshot => {
-        if (querySnapshot.docs.length) {
-          let courses = querySnapshot.docs.map(c => c.data());
-          console.log(courses);
-        }
-      });
-  };
-
   renderOptions = () => {
     let departmentsOption = [<option key="first"></option>];
 
@@ -99,33 +77,36 @@ class ExplorePage extends React.Component {
     } else {
       return (
         <Fragment>
-          {!this.state.isLoading && (
-            <Fragment>
-              <h1>Explore</h1>
+          <Container className="pageContainer" maxWidth="lg">
+            {this.state.isLoading && <LoadingPage />}
+            {!this.state.isLoading && (
+              <Fragment>
+                <Typography variant="h3" gutterBottom>
+                  Explore
+                </Typography>
 
-              <FormControl>
-                <InputLabel htmlFor="age-native-simple">
-                  Select Department
-                </InputLabel>
-                <Select
-                  native
-                  value={this.state.selectedDept}
-                  onChange={this.handleChange}
-                >
-                  {this.renderOptions()}
-                </Select>
-              </FormControl>
+                <FormControl style={{ marginBottom: 20 }}>
+                  <InputLabel htmlFor="age-native-simple">
+                    Select Department
+                  </InputLabel>
+                  <Select
+                    native
+                    value={this.state.selectedDept}
+                    onChange={this.handleChange}
+                  >
+                    {this.renderOptions()}
+                  </Select>
+                </FormControl>
 
-              <Results
-                courses={this.state.courses}
-                selectedDept={this.state.selectedDept}
-              ></Results>
-            </Fragment>
-          )}
+                <Results
+                  courses={this.state.courses}
+                  selectedDept={this.state.selectedDept}
+                ></Results>
+              </Fragment>
+            )}
+          </Container>
         </Fragment>
       );
     }
   }
 }
-
-export default ExplorePage;

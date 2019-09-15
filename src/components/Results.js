@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { db } from "../firebase";
 
@@ -42,9 +44,12 @@ export default class Results extends React.Component {
   render() {
     return (
       <section>
-        <h2>Results</h2>
-
+        <Typography variant="h6" gutterBottom>
+          Results
+        </Typography>
         <Paper>
+          {this.state.isLoading && <LinearProgress />}
+
           <Table component="div">
             <TableHead component="div">
               <TableRow component="div">
@@ -53,6 +58,7 @@ export default class Results extends React.Component {
                 <TableCell component="p">Name</TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody component="div">
               {this.state.courses.map(course => (
                 <TableRow

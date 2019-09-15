@@ -73,7 +73,18 @@ export default function AddReviewForm(props) {
               shrink: true
             }}
           />
-          <FormControl variant="outlined" style={displayBlock}>
+          <TextField
+            style={displayBlock}
+            id="outlined-full-width"
+            label="Term"
+            placeholder="e.g. Fall/Winter/Summer"
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          {/* <FormControl variant="outlined" style={displayBlock}>
             <InputLabel htmlFor="outlined-term-native-simple">Term*</InputLabel>
             <Select
               native
@@ -85,26 +96,18 @@ export default function AddReviewForm(props) {
               <option>Winter</option>
               <option>Summer</option>
             </Select>
-          </FormControl>
-          <FormControl
-            variant="outlined"
-            className={classes.formControl}
+          </FormControl> */}
+          <TextField
             style={displayBlock}
-          >
-            <InputLabel ref={inputLabel} htmlFor="outlined-year-native-simple">
-              Year*
-            </InputLabel>
-            <Select
-              native
-              value={props.values.year}
-              onChange={props.updateValue}
-            >
-              <option value="" />
-              <option>2001</option>
-              <option>2002</option>
-              <option>2003</option>
-            </Select>
-          </FormControl>
+            id="outlined-full-width"
+            label="Year"
+            placeholder="e.g. 2017"
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
           <Typography component="label">Interesting</Typography>
           <Slider
             defaultValue={3}
