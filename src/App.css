@@ -1,0 +1,19 @@
+body {
+  background-color: #efeff3;
+  margin: 0;
+}
+
+a {
+  text-decoration: none !important;
+  color: black;
+}
+
+li {
+  list-style: none;
+}
+
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 40px;
+}
