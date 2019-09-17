@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -43,11 +43,13 @@ export default function App() {
           </nav>
         </ToolBar>
       </AppBar>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/explore/:campus" component={ExplorePage} />
-      <Route path="/courses/:courseCode" component={CoursePage} />
-      <Route path="/404" component={NotFoundPage} />
-      <Route component={NotFoundPage} />
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/explore/:campus" component={ExplorePage} />
+        <Route exact path="/courses/:courseCode" component={CoursePage} />
+        <Route exact path="/404" component={NotFoundPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
     </Router>
   );
 }
