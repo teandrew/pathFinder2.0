@@ -47,6 +47,7 @@ export default function App() {
       <Route path="/explore/:campus" component={ExplorePage} />
       <Route path="/courses/:courseCode" component={CoursePage} />
       <Route path="/404" component={NotFoundPage} />
+      <Route component={NotFoundPage} />
     </Router>
   );
 }
