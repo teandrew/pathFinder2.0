@@ -45,7 +45,7 @@ def get_site_json():
     """
 
     """
-    url = BASE_URL + urlencode(all_courses_params)
+    url = BASE_URL + urlencode(mis)
     session = requests.session()
     try:
         session.get(url, headers=headers)
@@ -141,24 +141,28 @@ def main():
 
         full_course_url = COURSE_URL + course_link
         course_data = get_course_details(full_course_url)
-        """
+
         if course_data is not None:
             courses.append(course_data['code'])
-            c_ref = db.collection('courses').document(course_data['code'])
-            c_ref.set(course_data)
-            inst = course_data['institution']
-            dept = course_data['department']
-            
+            # c_ref = db.collection('courses').document(course_data['code'])
+            # c_ref.set(course_data)
+            dept = {
+                "dept": course_data['department'],
+                "inst": course_data['institution']
+            }
+
             if dept not in departments:
                 departments.append(dept)
-                d_ref = db.collection('departments').document(dept.replace('/', ''))
-                d_ref.set({
-                    'title': dept,
-                    'institution': inst
-                    })
-        """
-        print(course_data['code'] + ': ' +
-              course_data['name'] + '...................Done')
+        #         d_ref = db.collection('departments').document(
+        #             dept["dept"].replace('/', ''))
+        #         d_ref.set({
+        #             'title': dept["dept"],
+        #             'institution': dept["inst"]
+        #         })
+
+        # print(course_data['code'] + ': ' +
+        #       course_data['name'] + '...................Done')
+    print(departments)
 
     print('Done.')
     end_time = time.time()
