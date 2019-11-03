@@ -37,8 +37,32 @@ export default class AddReview extends React.Component {
     return cookieId;
   };
 
-  updateValue = e => {
-    console.log(e);
+  handleSubmit = event => {
+    event.preventDefault();
+  };
+
+  updateValue = event => {
+    this.setState({
+      reviewInfo: {
+        ...this.state.reviewInfo,
+        [event.target.id]: event.target.value
+      }
+    });
+  };
+
+  updateSliderValue = value => {
+    let interestingValue = document.getElementById("interesting");
+    let difficultyValue = document.getElementById("difficulty");
+
+    this.setState({
+      reviewInfo: {
+        ...this.state.reviewInfo,
+        interesting: interestingValue,
+        difficulty: difficultyValue
+      }
+    });
+
+    console.log(this.state.reviewInfo);
   };
 
   render() {
@@ -47,12 +71,12 @@ export default class AddReview extends React.Component {
         <Typography variant="h5" gutterBottom>
           Leave Your Own Review
         </Typography>
-        <Container maxWidth="sm">
-          <AddReviewForm
-            values={this.state.reviewInfo}
-            updateValue={this.updateValue}
-          />
-        </Container>
+        <AddReviewForm
+          formValues={this.state.reviewInfo}
+          handleSubmit={this.handleSubmit}
+          updateValue={this.updateValue}
+          updateSliderValue={this.updateSliderValue}
+        />
       </React.Fragment>
     );
   }

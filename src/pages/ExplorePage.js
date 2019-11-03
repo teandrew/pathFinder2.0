@@ -82,7 +82,7 @@ export default class ExplorePage extends React.Component {
             {!this.state.isLoading && (
               <Fragment>
                 <Typography variant="h3" gutterBottom>
-                  Explore
+                  Explore Courses
                 </Typography>
 
                 <FormControl style={{ marginBottom: 20 }}>

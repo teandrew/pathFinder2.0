@@ -56,9 +56,9 @@ export default class Reviews extends React.Component {
             Reviews
           </Typography>
           {!this.state.isLoading && (
-            <div>
+            <React.Fragment style={{ display: "flex" }}>
               {(!this.state.reviews.length && (
-                <Card style={{ marginBottom: 40 }}>
+                <Card style={{ marginRight: 8, marginBottom: 40 }}>
                   <CardContent>
                     <Typography component="p">
                       No one has left a review yet
@@ -73,7 +73,7 @@ export default class Reviews extends React.Component {
               {!this.state.userHasReviewed && (
                 <AddReview courseId={this.props.course.code} />
               )}
-            </div>
+            </React.Fragment>
           )}
         </Container>
       </Fragment>

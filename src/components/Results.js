@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Container from "@material-ui/core/Container";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -77,6 +78,13 @@ export default class Results extends React.Component {
             </TableBody>
           </Table>
         </Paper>
+        {!this.state.courses.length && (
+          <Container maxWidth="sm" style={{ padding: 40, textAlign: "center" }}>
+            <Typography variant="h6" color="textSecondary">
+              Choose a department above
+            </Typography>
+          </Container>
+        )}
       </section>
     );
   }

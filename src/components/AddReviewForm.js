@@ -30,11 +30,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AddReviewForm(props) {
+export default function AddReviewForm({
+  formValues,
+  handleSubmit,
+  updateValue,
+  updateSliderValue
+}) {
   const classes = useStyles();
+
   const inputLabel = React.useRef(null);
   const styles = { maxWidth: 345 };
   const displayBlock = { display: "block" };
+
   const marks = [
     {
       value: 1,
@@ -61,12 +68,14 @@ export default function AddReviewForm(props) {
   return (
     <Card style={styles}>
       <CardContent>
-        <form autoComplete="off">
+        <form autoComplete="off" onSubmit={handleSubmit}>
           <TextField
-            id="outlined-full-width"
+            id="professor"
+            value={formValues.professor}
             label="Professor"
             placeholder="e.g. Larry Zhang"
             fullWidth
+            onChange={updateValue}
             margin="normal"
             variant="outlined"
             InputLabelProps={{
@@ -74,8 +83,11 @@ export default function AddReviewForm(props) {
             }}
           />
           <TextField
+            required
+            id="term"
+            value={formValues.term}
+            onChange={updateValue}
             style={displayBlock}
-            id="outlined-full-width"
             label="Term"
             placeholder="e.g. Fall/Winter/Summer"
             margin="normal"
@@ -98,9 +110,13 @@ export default function AddReviewForm(props) {
             </Select>
           </FormControl> */}
           <TextField
+            required
+            value={formValues.year}
+            onChange={updateValue}
             style={displayBlock}
-            id="outlined-full-width"
+            id="year"
             label="Year"
+            type="number"
             placeholder="e.g. 2017"
             margin="normal"
             variant="outlined"
@@ -110,10 +126,11 @@ export default function AddReviewForm(props) {
           />
           <Typography component="label">Interesting</Typography>
           <Slider
+            id="interesting"
             defaultValue={3}
             aria-labelledby="discrete-slider"
             valueLabelDisplay="auto"
-            onChange={props.updateValue}
+            onChangeCommitted={(e, val) => updateSliderValue(val)}
             step={1}
             marks={marks}
             min={1}
@@ -122,16 +139,20 @@ export default function AddReviewForm(props) {
 
           <Typography component="label">Difficulty</Typography>
           <Slider
+            id="difficulty"
             defaultValue={3}
             aria-labelledby="discrete-slider"
             valueLabelDisplay="auto"
+            onChangeCommitted={(e, val) => updateSliderValue(e, val)}
             step={1}
             marks={marks}
             min={1}
             max={5}
           />
           <TextField
-            id="outlined-full-width"
+            id="comment"
+            value={formValues.comment}
+            onChange={updateValue}
             label="Comment"
             placeholder="e.g. Advice"
             helperText="Let other know what they should know about the course!"
@@ -145,7 +166,7 @@ export default function AddReviewForm(props) {
             }}
           />
 
-          <Button variant="contained" color="primary">
+          <Button variant="contained" type="submit" color="primary">
             Submit
           </Button>
         </form>
