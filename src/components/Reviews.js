@@ -48,6 +48,50 @@ export default class Reviews extends React.Component {
       });
   }
 
+  getReviews = () => {
+    db.collection("reviews")
+      .where("course_id", "==", this.props.course.code)
+      .get()
+      .then(querySnapshot => {
+        const reviews = querySnapshot.docs.length
+          ? querySnapshot.docs.map(r => r.data())
+          : [];
+
+        this.setState({ reviews: reviews });
+      });
+  };
+
+  addReview = reviewInfo => {
+    let cookieId = localStorage.getItem("c_id");
+
+    if (!cookieId) {
+      cookieId = this.createCookieId();
+      localStorage.setItem("c_id", cookieId);
+    }
+
+    let reviewInfo_copy = {
+      ...reviewInfo,
+      reviewedBy: cookieId
+    };
+
+    db.collection("reviews")
+      .add({ ...reviewInfo_copy })
+      .then(() => {
+        this.setState({ userHasReviewed: true });
+        this.getReviews();
+      });
+  };
+
+  createCookieId = () => {
+    let cookieId = "";
+    const possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 41; i++)
+      cookieId += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return cookieId;
+  };
+
   render() {
     return (
       <Fragment>
@@ -56,7 +100,7 @@ export default class Reviews extends React.Component {
             Reviews
           </Typography>
           {!this.state.isLoading && (
-            <React.Fragment style={{ display: "flex" }}>
+            <React.Fragment>
               {(!this.state.reviews.length && (
                 <Card style={{ marginRight: 8, marginBottom: 40 }}>
                   <CardContent>
@@ -71,7 +115,10 @@ export default class Reviews extends React.Component {
                     <Review key={review.reviewedBy} review={review} />
                   )))}
               {!this.state.userHasReviewed && (
-                <AddReview courseId={this.props.course.code} />
+                <AddReview
+                  courseId={this.props.course.code}
+                  addReview={this.addReview}
+                />
               )}
             </React.Fragment>
           )}
